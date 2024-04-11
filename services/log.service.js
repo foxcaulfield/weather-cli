@@ -1,12 +1,12 @@
 import chalk from "chalk";
 
 const printError = (text) => {
-    const errorText = chalk.bgRed(`ERROR ${text}`);
+    const errorText = `${chalk.bgRed("ERROR")}  ${text}`;
     console.log(errorText);
 };
 
 const printSuccess = (text) => {
-    const successText = chalk.bgGreen(`ERROR ${text}`);
+    const successText = `${chalk.bgGreen("SUCCESS")} ${text}`;
     console.log(successText);
 };
 
