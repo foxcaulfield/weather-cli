@@ -1,0 +1,12 @@
+{
+    "openweater": {
+        "apiUrl": "https://api.openweathermap.org",
+        "endpoints": {
+            "weather": "/data/2.5/weather",
+            "data": "/data/2.5",
+            "geocodingLocation": "/geo/1.0/direct",
+            "geocodingZip": "/geo/1.0/zip",
+            "geocodingReverse": "/geo/1.0/reverse"
+        }
+    }
+}
