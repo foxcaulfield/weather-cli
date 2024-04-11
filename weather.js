@@ -1,10 +1,20 @@
 #!/usr/bin/env node
 import { getArgs } from "./helpers/args.js";
-import { printHelp, printInfo } from "./services/log_service.js";
+import { printHelp, printInfo, printSuccess, printError } from "./services/log.service.js";
 import fs from "node:fs";
 import path from "node:path";
+import { setKeyValue } from "./services/storage.service.js";
 
-const initCLI = () => {
+const saveToken = async (token) => {
+    try {
+        await setKeyValue("token", token);
+        printSuccess("Token saved!");
+    } catch (error) {
+        printError("Token not saved! " + error.message);
+    }
+}
+
+const initCLI = async () => {
     const args = getArgs(process.argv);
 
     if (args.h) {
@@ -12,14 +22,11 @@ const initCLI = () => {
         const helpFilePath = path.resolve(".", "assets", "help.txt");
         const helpText = fs.readFileSync(helpFilePath, { encoding: "utf-8" });
         printHelp(helpText);
-    }
-
-    if (args.s) {
+    } else if (args.s) {
         // Specify
-    }
-
-    if (args.t) {
+    } else if (args.t) {
         // Token
+        await saveToken(args.t);
     }
 
     // Weather
