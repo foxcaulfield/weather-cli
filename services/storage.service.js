@@ -5,6 +5,11 @@ import fsPromise from "node:fs/promises";
 
 const filePath = path.join(os.homedir(), "weather-data.json")
 
+const STORAGE_CONSTANTS = {
+    TOKEN: "token",
+    CITY: "city"
+}
+
 const setKeyValue = async (key, value) => {
     // console.log(path.basename(filePath));
     let data = {};
@@ -28,4 +33,4 @@ const getKeyValue = async (key) => {
 };
 
 
-export { setKeyValue, getKeyValue };
+export { setKeyValue, getKeyValue, STORAGE_CONSTANTS };
