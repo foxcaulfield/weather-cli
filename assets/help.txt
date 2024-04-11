@@ -1,0 +1,4 @@
+No params:  plain weather output
+-c [CITY]:  specify a city
+-h:         print help
+-t:         save a token
