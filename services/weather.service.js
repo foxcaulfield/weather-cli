@@ -1,38 +1,42 @@
 import axios from "axios";
 import config from "../app.config.json"  with { type: "json" };
-import { STORAGE_CONSTANTS, getKeyValue } from "./storage.service.js";
 
-class WeatherAPI extends axios.Axios {
-    token;
+class WeatherAPI {
+    #token;
+    #axiosInstance;
     constructor({ baseUrl, token }) {
-        super({
-            baseURL: baseUrl
+        this.#axiosInstance = axios.create({
+            baseURL: baseUrl,
+            // responseType: "json",
+            // transformResponse: res => res
         });
-        this.token = token;
+        this.#token = token;
     }
-    async getWeather(lat, lon) {
-        const result = await this.get(config.openweater.endpoints.weather, {
+    async #getWeather(lat, lon) {
+        const result = await this.#axiosInstance.get(config.openweater.endpoints.weather, {
             params: {
                 lat,
                 lon,
-                appid: this.token,
+                appid: this.#token,
+                lang: config.openweater.language,
                 units: "metric"
             }
         });
-        return JSON.parse(result.data);
+        return (result.data);
     }
-    async getCity(name) {
-        const result = await this.get(config.openweater.endpoints.geocodingLocation, {
+    async #getCity(name) {
+        const result = await this.#axiosInstance.get(config.openweater.endpoints.geocodingLocation, {
             params: {
                 q: name,
-                appid: this.token
+                appid: this.#token
             }
         });
-        return JSON.parse(result.data)[0];
+        return (result.data)[0];
     }
     async getCityWeather(name) {
-        const cityData = await this.getCity(name);
-        return await this.getWeather(cityData.lat, cityData.lon);
+        console.log(this.#axiosInstance);
+        const cityData = await this.#getCity(name);
+        return await this.#getWeather(cityData.lat, cityData.lon);
     }
 }
 
