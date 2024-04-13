@@ -10,6 +10,10 @@ export class App {
     #argsParser;
     #storageManager;
     #logManager;
+    STORAGE_CONSTANTS = {
+        TOKEN: Symbol("token"),
+        CITY: Symbol("city")
+    } 
 
     constructor() {
         this.#argsParser = new ArgumentParser();

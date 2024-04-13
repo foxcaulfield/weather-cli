@@ -12,16 +12,11 @@ class StorageManager {
         return this.#filePath;
     }
 
-    static STORAGE_CONSTANTS = {
-        TOKEN: Symbol("token"),
-        CITY: Symbol("city")
-    } // Move to App later
-
     constructor({ filePath }) {
         this.#filePath = filePath;
         console.log("Storage manager instantiated");
     }
-    setKeyValue = async (key, value) => {
+    async setKeyValue(key, value) {
         this.#data[key] = value;
         await this.#synchronize();
     }
@@ -29,9 +24,7 @@ class StorageManager {
     async getKeyValue(key) {
         return this.#data[key];
     }
-    async getToken() {
-        return this.#data[this.STORAGE_CONSTANTS.TOKEN];
-    }
+
     async #getParsedFileData() {
         const fileContent = await fs.promises.readFile(this.#filePath);
         const data = JSON.parse(fileContent);
