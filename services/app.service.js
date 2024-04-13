@@ -1,11 +1,59 @@
+import { ArgumentParser } from "./args.service.js";
+import { LogManager } from "./log.service.js";
+import { StorageManager } from "./storage.service.js";
+import os from "node:os";
+import path from "node:path";
+const FILE_PATH = path.join(os.homedir(), "weather-data.json"); // Move upper later
 
 export class App {
+    #token;
+    #argsParser;
+    #storageManager;
+    #logManager;
+
     constructor() {
-        console.log("App instance created");
+        this.#argsParser = new ArgumentParser();
+        this.#storageManager = new StorageManager({ filePath: FILE_PATH });
+        this.#logManager = new LogManager();
+        console.log("App instance instantiated");
     }
-    init() {
-        console.log("App instance initialized");
+    async init() {
+        try {
+            await this.#argsParser.init();
+            await this.#storageManager.init();
+            this.#token = await this.#storageManager.getToken();
+            console.log("App instance initialized");
+        } catch (error) {
+            this.#logManager.printError(error.message);
+            process.exit(1);
+        }
+
+        // // Check arguments
+        // // - check token
+        // this.#argsParser.myArgs
+        // // - check city
+
+        // // Check stored data
+        // // - check token
+        // const isTokenExist = await this.#checkTokenExist();
+        // // - check city
+        // const isCityExist = await this.#checkCityExist();
+
+
+
+        // Init
     }
+    // async #checkTokenExist() {
+    //     // const token = process.env.APIKEY ?? await getKeyValue(STORAGE_CONSTANTS.TOKEN);
+    //     return Boolean(await this.#storageManager.getKeyValue(StorageManager.STORAGE_CONSTANTS.TOKEN));
+    // }
+    // async #checkCityExist() {
+    //     return Boolean(await this.#storageManager.getKeyValue(StorageManager.STORAGE_CONSTANTS.CITY));
+    // }
+    // get args() {
+    //     return this.#argsParser.myArgs;
+    // }
+
 }
 
 
