@@ -11,6 +11,9 @@ class StorageManager {
     get filePath() {
         return this.#filePath;
     }
+    get data() {
+        return this.#data;
+    }
 
     constructor({ filePath }) {
         this.#filePath = filePath;
