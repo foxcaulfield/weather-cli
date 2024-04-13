@@ -1,18 +1,23 @@
 import yargs from "yargs";
 import { hideBin } from 'yargs/helpers';
-import { printError } from "./log.service.js";
+// import { printError } from "./log.service.js";
 
 // const ARGS = yargs(hideBin(process.argv))
 // .parse();
 
 export class ArgumentParser {
-    myArgs;
+    args;
+    #yargsLib;
+    #yargsInstance;
+
     constructor() {
-        this.yargsInstance = yargs;
+        this.#yargsLib = yargs;
         this.#setupOptions();
+        // this.#init();
+        console.log("Argument parser instantiated");
     }
     #setupOptions() {
-        this.myArgs = this.yargsInstance(hideBin(process.argv))
+        this.#yargsInstance = this.#yargsLib(hideBin(process.argv))
             .option("key", {
                 alias: "k",
                 describe: "Provide an API key",
@@ -34,12 +39,8 @@ export class ArgumentParser {
             })
             .exitProcess(false);
     }
-    init() {
-        try {
-            return this.myArgs.parse();
-        } catch (error) {
-            printError(error.message);
-            process.exit(1);
-        }
+    async init() {
+        this.args = await this.#yargsInstance.parseAsync();
+        console.log("Argument parser initialized");
     }
 }
