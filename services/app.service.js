@@ -6,14 +6,13 @@ import path from "node:path";
 const FILE_PATH = path.join(os.homedir(), "weather-data.json"); // Move upper later
 
 export class App {
-    #token;
     #argsParser;
     #storageManager;
     #logManager;
     STORAGE_CONSTANTS = {
-        TOKEN: Symbol("token"),
+        API_KEY: Symbol("token"),
         CITY: Symbol("city")
-    } 
+    }
 
     constructor() {
         this.#argsParser = new ArgumentParser();
@@ -23,30 +22,64 @@ export class App {
     }
     async init() {
         try {
-            await this.#argsParser.init();
-            await this.#storageManager.init();
-            this.#token = await this.#storageManager.getToken();
-            console.log("App instance initialized");
+            await this.#argsParser.init(); // Includes arg conflicts check
+            await this.#storageManager.init(); // Includes file permission check
+
+            for (let key of Object.keys(this.STORAGE_CONSTANTS)) {
+                const hasInArgs = key in this.#argsParser.args;
+                const hasInStorage = key in this.#storageManager.data;
+                if (hasInArgs) {
+                    this.#storageManager.setKeyValue(key, this.#argsParser.args[key]);
+                } else if (!hasInStorage) {
+                    throw new Error(`Key '${key}' is required. Please provide it as a command-line argument.`);
+                }
+            }
         } catch (error) {
             this.#logManager.printError(error.message);
             process.exit(1);
         }
-
-        // // Check arguments
-        // // - check token
-        // this.#argsParser.myArgs
-        // // - check city
-
-        // // Check stored data
-        // // - check token
-        // const isTokenExist = await this.#checkTokenExist();
-        // // - check city
-        // const isCityExist = await this.#checkCityExist();
-
-
-
-        // Init
     }
+
+    /*
+    1. Делает это с аргументом КЛЮЧ
+        Перезапись КЛЮЧА в файле
+        Проверка ГОРОДА
+            Если ГОРОДА нет - ошибка (промпт) города
+    
+    2. Делает это с аргументом ГОРОД
+        Перезапись ГОРОДА в файле
+        Проверка КЛЮЧА
+            Если КЛЮЧА нет - ошибка (промпт) ключа
+    
+    3. Делает это с аргументами КЛЮЧ и ГОРОД
+        Перезапись КЛЮЧА
+        Перезапись ГОРОДА
+    
+    4. Делает это без аргументов
+        Проверка КЛЮЧА
+            Если КЛЮЧА нет - ошибка (промпт) КЛЮЧА
+    	
+        Проверка ГОРОДА
+            Если ГОРОДА нет - ошибка (промпт) ГОРОДА
+    */
+
+
+    // // Check arguments
+    // // - check token
+    // this.#argsParser.myArgs
+    // // - check city
+
+    // // Check stored data
+    // // - check token
+    // const isTokenExist = await this.#checkTokenExist();
+    // // - check city
+    // const isCityExist = await this.#checkCityExist();
+
+
+
+    // Init
+
+
     // async #checkTokenExist() {
     //     // const token = process.env.APIKEY ?? await getKeyValue(STORAGE_CONSTANTS.TOKEN);
     //     return Boolean(await this.#storageManager.getKeyValue(StorageManager.STORAGE_CONSTANTS.TOKEN));
