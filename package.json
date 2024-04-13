@@ -10,9 +10,9 @@
   "scripts": {
     "start": "node weather.js",
     "test1": "node weather.js -k",
-    "test2": "node weather.js -k 1",
-    "test3": "node weather.js -k 1 -c",
-    "test4": "node weather.js -k 1 -c m"
+    "test2": "node weather.js -k aaa",
+    "test3": "node weather.js -k aaa -c",
+    "test4": "node weather.js -k aaa -c ccc"
   },
   "keywords": [
     "cli",
