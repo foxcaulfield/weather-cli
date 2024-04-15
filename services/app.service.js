@@ -13,7 +13,7 @@ export class App {
         this.#storageManager = storageManager;
         this.#logManager = logManager;
         this.#weatherManager = weatherManager;
-        console.log("App instance instantiated");
+        // console.log("App instance instantiated");
     }
 
     async launch() {
@@ -36,25 +36,25 @@ export class App {
                 }
             }
 
-            console.log("Data checked");
+            // console.log("Data checked");
 
             for (let cb of callbacks) {
                 await cb();
             }
 
-            console.log("Callbacks called");
+            // console.log("Callbacks called");
 
             const apikey = await this.#storageManager.getKeyValue(this.STORAGE_CONSTANTS.API_KEY);
             const city = await this.#storageManager.getKeyValue(this.STORAGE_CONSTANTS.CITY);
 
-            console.log("apikey", apikey);
-            console.log("city", city);
+            // console.log("apikey", apikey);
+            // console.log("city", city);
 
             await this.#weatherManager.launch({ apikey });
-            console.log("App initialized");
+            // console.log("App initialized");
 
-            const weather = await this.#weatherManager.getCityWeather(city);
-
+            // const weather = await this.#weatherManager.getCityWeather(city);
+            await this.#weatherManager.printCityWeather(city);
         } catch (error) {
             this.#logManager.printError(error.message);
             process.exit(1);
