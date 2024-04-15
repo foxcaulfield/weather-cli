@@ -1,4 +1,0 @@
-No params:  plain weather output
--c [CITY]:  specify a city
--h:         print help
--k:         save an API key
