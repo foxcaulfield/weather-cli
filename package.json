@@ -8,11 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node weather.js",
-    "test1": "node weather.js -k",
-    "test2": "node weather.js -k aaa",
-    "test3": "node weather.js -k aaa -c",
-    "test4": "node weather.js -k aaa -c ccc"
+    "start": "node weather.js"
   },
   "keywords": [
     "cli",
