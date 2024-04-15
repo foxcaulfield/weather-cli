@@ -78,7 +78,7 @@ class WeatherAPI {
         const weatherData = await this.getCityWeather(name);
         
         console.log(dedent(`
-        ${chalk.bgBlue("WEATHER")} in ${weatherData.name} (${weatherData.sys.country})
+        ${chalk.bgBlue(`WEATHER in ${weatherData.name} (${weatherData.sys.country})`)}
         ${this.#icons[weatherData.weather[0].icon]}  ${weatherData.weather[0].main}/${weatherData.weather[0].description}
         Temperature:\t${weatherData.main.temp}
         Feels like:\t${weatherData.main.feels_like}
