@@ -6,6 +6,26 @@ class WeatherAPI {
     #config;
     #apikey;
     #axiosInstance;
+    #icons = {
+        "01d": "☀️",
+        "02d": "⛅️",
+        "03d": "☁️",
+        "04d": "☁️",
+        "09d": "\uD83C\uDF27",
+        "10d": "\uD83C\uDF26",
+        "11d": "⛈",
+        "13d": "❄️",
+        "50d": "\uD83C\uDF2B",
+        "01n": "\uD83C\uDF11",
+        "02n": "\uD83C\uDF11 ☁",
+        "03n": "☁️",
+        "04n": "️️☁☁",
+        "09n": "\uD83C\uDF27",
+        "10n": "☔️",
+        "11n": "⛈",
+        "13n": "❄️",
+        "50n": "\uD83C\uDF2B"
+    };
     constructor({ config }) {
         this.#config = config;
         // console.log("Weather manager instantiated");
@@ -56,9 +76,10 @@ class WeatherAPI {
     }
     async printCityWeather(name) {
         const weatherData = await this.getCityWeather(name);
+        
         console.log(dedent(`
         ${chalk.bgBlue("WEATHER")} in ${weatherData.name} (${weatherData.sys.country})
-        ${weatherData.weather[0].icon}  ${weatherData.weather[0].main}/${weatherData.weather[0].description}
+        ${this.#icons[weatherData.weather[0].icon]}  ${weatherData.weather[0].main}/${weatherData.weather[0].description}
         Temperature:\t${weatherData.main.temp}
         Feels like:\t${weatherData.main.feels_like}
         Humidity:\t${weatherData.main.humidity} %
