@@ -25,5 +25,4 @@ class LogManager {
     }
 }
 
-// export { printError, printSuccess, printInfo, printHelp };
 export { LogManager };
