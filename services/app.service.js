@@ -25,13 +25,14 @@ export class App {
             await this.#argsParser.init(); // Includes arg conflicts check
             await this.#storageManager.init(); // Includes file permission check
 
-            for (let key of Object.keys(this.STORAGE_CONSTANTS)) {
+            for (let [key] of Object.keys(this.#argsParser.options)) {
                 const hasInArgs = key in this.#argsParser.args;
                 const hasInStorage = key in this.#storageManager.data;
                 if (hasInArgs) {
                     this.#storageManager.setKeyValue(key, this.#argsParser.args[key]);
                 } else if (!hasInStorage) {
-                    throw new Error(`Key '${key}' is required. Please provide it as a command-line argument.`);
+                    // Prompt is possible
+                    throw new Error(`Key '${key}' is required. Please provide it as a command-line argument (check the help).`);
                 }
             }
         } catch (error) {
@@ -40,44 +41,6 @@ export class App {
         }
     }
 
-    /*
-    1. Делает это с аргументом КЛЮЧ
-        Перезапись КЛЮЧА в файле
-        Проверка ГОРОДА
-            Если ГОРОДА нет - ошибка (промпт) города
-    
-    2. Делает это с аргументом ГОРОД
-        Перезапись ГОРОДА в файле
-        Проверка КЛЮЧА
-            Если КЛЮЧА нет - ошибка (промпт) ключа
-    
-    3. Делает это с аргументами КЛЮЧ и ГОРОД
-        Перезапись КЛЮЧА
-        Перезапись ГОРОДА
-    
-    4. Делает это без аргументов
-        Проверка КЛЮЧА
-            Если КЛЮЧА нет - ошибка (промпт) КЛЮЧА
-    	
-        Проверка ГОРОДА
-            Если ГОРОДА нет - ошибка (промпт) ГОРОДА
-    */
-
-
-    // // Check arguments
-    // // - check token
-    // this.#argsParser.myArgs
-    // // - check city
-
-    // // Check stored data
-    // // - check token
-    // const isTokenExist = await this.#checkTokenExist();
-    // // - check city
-    // const isCityExist = await this.#checkCityExist();
-
-
-
-    // Init
 
 
     // async #checkTokenExist() {
