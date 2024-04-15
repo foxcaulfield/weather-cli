@@ -1,9 +1,5 @@
 import yargs from "yargs";
 import { hideBin } from 'yargs/helpers';
-// import { printError } from "./log.service.js";
-
-// const ARGS = yargs(hideBin(process.argv))
-// .parse();
 
 export class ArgumentManager {
     args;
@@ -29,8 +25,7 @@ export class ArgumentManager {
     constructor() {
         this.#yargsLib = yargs;
         this.#setupOptions();
-        // this.#init();
-        console.log("Argument parser instantiated");
+        // console.log("Argument parser instantiated");
     }
     #setupOptions() {
         this.#yargsInstance = this.#yargsLib(hideBin(process.argv))
@@ -44,6 +39,6 @@ export class ArgumentManager {
     }
     async launch() {
         this.args = await this.#yargsInstance.parseAsync();
-        console.log("Argument parser initialized");
+        // console.log("Argument parser initialized");
     }
 }

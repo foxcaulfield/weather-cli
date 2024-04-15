@@ -1,8 +1,4 @@
-import os from "node:os";
-import path from "node:path";
 import fs from "node:fs";
-import fsPromise from "node:fs/promises";
-
 
 class StorageManager {
     /* readonly */ #filePath;
@@ -17,7 +13,7 @@ class StorageManager {
 
     constructor({ filePath }) {
         this.#filePath = filePath;
-        console.log("Storage manager instantiated");
+        // console.log("Storage manager instantiated");
     }
     async setKeyValue(key, value) {
         this.#data[key] = value;
@@ -48,7 +44,7 @@ class StorageManager {
 
         const fileContent = await fs.promises.readFile(this.#filePath);
         this.#data = JSON.parse(fileContent);
-        console.log("Storage manager initialized");
+        // console.log("Storage manager initialized");
     }
     async #isFileExist(filePath) {
         try {

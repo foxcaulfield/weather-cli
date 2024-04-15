@@ -26,5 +26,5 @@ const application = new App({
 
 application
     .launch()
-    .then(() => console.log("App started"))
     .catch((error) => console.error(error));
+// .then(() => // console.log("App started"))
