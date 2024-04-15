@@ -31,16 +31,23 @@ class WeatherAPI {
         return (result.data);
     }
     async #getCity(name) {
-        const result = await this.#axiosInstance.get(config.openweater.endpoints.geocodingLocation, {
-            params: {
-                q: name,
-                appid: this.#apikey
+        try {
+            const result = await this.#axiosInstance.get(config.openweater.endpoints.geocodingLocation, {
+                params: {
+                    q: name,
+                    appid: this.#apikey
+                }
+            });
+            if (!result.data?.length) {
+                throw new Error("Invalid city name. Please provide another value.")
             }
-        });
-        if (!result.data?.length) {
-            throw new Error("Invalid city name. Please provide another value.")
+            return (result.data)[0];
+        } catch (error) {
+            if (error.name === "AxiosError" && error.response.status === 401) {
+                throw new Error("Invalid api key. Please provide another value.")
+            }
+            throw error;
         }
-        return (result.data)[0];
     }
     async getCityWeather(name) {
         const cityData = await this.#getCity(name);
