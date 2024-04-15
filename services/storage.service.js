@@ -33,7 +33,7 @@ class StorageManager {
         const data = JSON.parse(fileContent);
         return data;
     }
-    async init() {
+    async launch() {
         const isExist = await this.#isFileExist(this.#filePath);
 
         if (!isExist) {
@@ -48,6 +48,7 @@ class StorageManager {
 
         const fileContent = await fs.promises.readFile(this.#filePath);
         this.#data = JSON.parse(fileContent);
+        console.log("Storage manager initialized");
     }
     async #isFileExist(filePath) {
         try {
