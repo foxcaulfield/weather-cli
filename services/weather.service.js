@@ -37,6 +37,9 @@ class WeatherAPI {
                 appid: this.#apikey
             }
         });
+        if (!result.data?.length) {
+            throw new Error("Invalid city name. Please provide another value.")
+        }
         return (result.data)[0];
     }
     async getCityWeather(name) {
