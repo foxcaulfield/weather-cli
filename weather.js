@@ -1,4 +1,4 @@
-#!/usr/bin/env node --no-warnings=ExperimentalWarning
+#!/usr/bin/env node
 
 import path from "node:path";
 import os from "node:os";

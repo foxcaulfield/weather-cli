@@ -1,6 +1,6 @@
 {
   "name": "what-is-the-weather",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "weather.js",
   "bin": {
@@ -18,7 +18,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/foxcaulfield/what-is-the-weather"
+    "url": "git+https://github.com/foxcaulfield/what-is-the-weather.git"
   },
   "dependencies": {
     "axios": "^1.6.8",
