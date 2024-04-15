@@ -1,19 +1,18 @@
 import axios from "axios";
-import config from "../app.config.json"  with { type: "json" };
 import chalk from "chalk";
 import dedent from "dedent";
 
 class WeatherAPI {
-    #baseUrl;
+    #config;
     #apikey;
     #axiosInstance;
-    constructor({ baseUrl }) {
-        this.#baseUrl = baseUrl;
+    constructor({ config }) {
+        this.#config = config;
         // console.log("Weather manager instantiated");
     }
     async launch({ apikey }) {
         this.#axiosInstance = axios.create({
-            baseURL: this.#baseUrl,
+            baseURL: this.#config.apiUrl,
             // responseType: "json",
             // transformResponse: res => res
         });
@@ -21,12 +20,12 @@ class WeatherAPI {
         // console.log("Weather manager initialized");
     }
     async #getWeather(lat, lon) {
-        const result = await this.#axiosInstance.get(config.openweater.endpoints.weather, {
+        const result = await this.#axiosInstance.get(this.#config.endpoints.weather, {
             params: {
                 lat,
                 lon,
                 appid: this.#apikey,
-                lang: config.openweater.language,
+                lang: this.#config.language,
                 units: "metric"
             }
         });
@@ -34,7 +33,7 @@ class WeatherAPI {
     }
     async #getCity(name) {
         try {
-            const result = await this.#axiosInstance.get(config.openweater.endpoints.geocodingLocation, {
+            const result = await this.#axiosInstance.get(this.#config.endpoints.geocodingLocation, {
                 params: {
                     q: name,
                     appid: this.#apikey
