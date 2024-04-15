@@ -1,146 +1,63 @@
-import { ArgumentParser } from "./args.service.js";
-import { LogManager } from "./log.service.js";
-import { StorageManager } from "./storage.service.js";
-import os from "node:os";
-import path from "node:path";
-const FILE_PATH = path.join(os.homedir(), "weather-data.json"); // Move upper later
-
 export class App {
-    #argsParser;
+    #argsManager;
     #storageManager;
     #logManager;
+    #weatherManager;
     STORAGE_CONSTANTS = {
-        API_KEY: Symbol("token"),
-        CITY: Symbol("city")
+        API_KEY: "key",
+        CITY: "city"
     }
 
-    constructor() {
-        this.#argsParser = new ArgumentParser();
-        this.#storageManager = new StorageManager({ filePath: FILE_PATH });
-        this.#logManager = new LogManager();
+    constructor({ argsManager, storageManager, logManager, weatherManager }) {
+        this.#argsManager = argsManager;
+        this.#storageManager = storageManager;
+        this.#logManager = logManager;
+        this.#weatherManager = weatherManager;
         console.log("App instance instantiated");
     }
-    async init() {
-        try {
-            await this.#argsParser.init(); // Includes arg conflicts check
-            await this.#storageManager.init(); // Includes file permission check
 
-            for (let [key] of Object.keys(this.#argsParser.options)) {
-                const hasInArgs = key in this.#argsParser.args;
-                const hasInStorage = key in this.#storageManager.data;
+    async launch() {
+        try {
+            await this.#argsManager.launch(); // Includes arg conflicts check
+            await this.#storageManager.launch(); // Includes file permission check
+
+            // for (let [key] of Object.keys(this.#argsManager.options)) {
+            const callbacks = [];
+
+            for (let [key, value] of Object.entries(this.STORAGE_CONSTANTS)) {
+                const hasInArgs = value in this.#argsManager.args;
+                const hasInStorage = value in this.#storageManager.data;
                 if (hasInArgs) {
-                    this.#storageManager.setKeyValue(key, this.#argsParser.args[key]);
+                    // await this.#storageManager.setKeyValue(value, this.#argsManager.args[value]);
+                    callbacks.push(async () => await this.#storageManager.setKeyValue(value, this.#argsManager.args[value]));
                 } else if (!hasInStorage) {
                     // Prompt is possible
-                    throw new Error(`Key '${key}' is required. Please provide it as a command-line argument (check the help).`);
+                    throw new Error(`Key '${value}' is required. Please provide it as a command-line argument (check the help).`);
                 }
             }
+
+            console.log("Data checked");
+
+            for (let cb of callbacks) {
+                await cb();
+            }
+
+            console.log("Callbacks called");
+
+            const apikey = await this.#storageManager.getKeyValue(this.STORAGE_CONSTANTS.API_KEY);
+            const city = await this.#storageManager.getKeyValue(this.STORAGE_CONSTANTS.CITY);
+
+            console.log("apikey", apikey);
+            console.log("city", city);
+
+            await this.#weatherManager.launch({ apikey });
+            console.log("App initialized");
+
+            const weather = await this.#weatherManager.getCityWeather(city);
+
         } catch (error) {
             this.#logManager.printError(error.message);
             process.exit(1);
         }
     }
-
-
-
-    // async #checkTokenExist() {
-    //     // const token = process.env.APIKEY ?? await getKeyValue(STORAGE_CONSTANTS.TOKEN);
-    //     return Boolean(await this.#storageManager.getKeyValue(StorageManager.STORAGE_CONSTANTS.TOKEN));
-    // }
-    // async #checkCityExist() {
-    //     return Boolean(await this.#storageManager.getKeyValue(StorageManager.STORAGE_CONSTANTS.CITY));
-    // }
-    // get args() {
-    //     return this.#argsParser.myArgs;
-    // }
-
 }
-
-
-/*
-const argParses = new ArgumentParser();
-const args = await argParses.init();
-
-console.log("args");
-console.log(args);
-
-class CLI {
-    constructor({ ARGS }) {
-        if (!ARGS.key) {
-            throw new Error("No API key provided");
-        }
-    }
-    async init() {
-
-        // const token = process.env.APIKEY ?? await getKeyValue(STORAGE_CONSTANTS.TOKEN);
-
-        if (!token) {
-            throw new Error("No APIKEY provided");
-        }
-
-        const weatherApi = new WeatherAPI({
-            baseUrl: config.openweater.apiUrl,
-            token: token
-        });
-
-
-        const getForecast = async () => {
-            try {
-                // console.log(await weatherApi.getCityWeather(args.c));
-                console.log(await weatherApi.getCityWeather(process.env.CITY)); // 
-            } catch (error) {
-                if (error?.response?.status === 404) {
-                    printError("City value is invalid");
-                } else if (error?.response?.status === 401) {
-                    printError("API-key value is invalid");
-                } else {
-                    printError(error.message);
-                }
-            }
-        };
-
-
-        if (args.h) {
-            // Help
-            const helpFilePath = path.resolve(".", "assets", "help.txt");
-            const helpText = fs.readFileSync(helpFilePath, { encoding: "utf-8" });
-            printHelp(helpText);
-        } else if (args.c) {
-            // Specify the city
-        } else if (args.k) {
-            // Token
-            await saveToken(args.k);
-        }
-        // set lang
-        // set units
-
-        // Weather
-        await getForecast();
-
-    }
-}
-
-
-const saveToken = async (token) => {
-    if (!token.length) {
-        printError("No token provided");
-        return;
-    }
-    try {
-        await setKeyValue(STORAGE_CONSTANTS.TOKEN, token);
-        printSuccess("Token saved!");
-    } catch (error) {
-        printError("Token not saved! " + error.message);
-    }
-}
-
-
-
-
-
-// initCLI();
-
-const cli = new CLI({ ARGS });
-
-cli.init();
-*/
