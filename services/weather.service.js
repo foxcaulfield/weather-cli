@@ -1,5 +1,7 @@
 import axios from "axios";
 import config from "../app.config.json"  with { type: "json" };
+import chalk from "chalk";
+import dedent from "dedent";
 
 class WeatherAPI {
     #baseUrl;
@@ -7,7 +9,7 @@ class WeatherAPI {
     #axiosInstance;
     constructor({ baseUrl }) {
         this.#baseUrl = baseUrl;
-        console.log("Weather manager instantiated");
+        // console.log("Weather manager instantiated");
     }
     async launch({ apikey }) {
         this.#axiosInstance = axios.create({
@@ -16,7 +18,7 @@ class WeatherAPI {
             // transformResponse: res => res
         });
         this.#apikey = apikey;
-        console.log("Weather manager initialized");
+        // console.log("Weather manager initialized");
     }
     async #getWeather(lat, lon) {
         const result = await this.#axiosInstance.get(config.openweater.endpoints.weather, {
@@ -52,6 +54,17 @@ class WeatherAPI {
     async getCityWeather(name) {
         const cityData = await this.#getCity(name);
         return await this.#getWeather(cityData.lat, cityData.lon);
+    }
+    async printCityWeather(name) {
+        const weatherData = await this.getCityWeather(name);
+        console.log(dedent(`
+        ${chalk.bgBlue("WEATHER")} in ${weatherData.name} (${weatherData.sys.country})
+        ${weatherData.weather[0].icon}  ${weatherData.weather[0].main}/${weatherData.weather[0].description}
+        Temperature:\t${weatherData.main.temp}
+        Feels like:\t${weatherData.main.feels_like}
+        Humidity:\t${weatherData.main.humidity} %
+        Wind speed:\t${weatherData.wind.speed} m/s
+        `));
     }
 }
 
