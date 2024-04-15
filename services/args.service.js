@@ -5,7 +5,7 @@ import { hideBin } from 'yargs/helpers';
 // const ARGS = yargs(hideBin(process.argv))
 // .parse();
 
-export class ArgumentParser {
+export class ArgumentManager {
     args;
     options = {
         key: {
@@ -42,7 +42,7 @@ export class ArgumentParser {
             // })
             .exitProcess(false);
     }
-    async init() {
+    async launch() {
         this.args = await this.#yargsInstance.parseAsync();
         console.log("Argument parser initialized");
     }
