@@ -1,24 +1,40 @@
-# 🌤️ what-is-the-weather 🌧️
 
-This repository contains a CLI Weather App that retrieves weather information for a specified city using the OpenWeatherMap API. 
+# what-is-the-weather CLI app
+
+## Overview
+what-is-the-weather is a Command-Line Interface (CLI) application that allows users to retrieve weather information for a specified city. This app leverages the OpenWeather API to fetch real-time weather data based on the user's input.
 
 ## Installation
-
-ℹ️ **Note**: This repository is published on [NPM](https://www.npmjs.com/package/what-is-the-weather) and available to install via npm. You can install it using:
+You can install what-is-the-weather globally via npm by running the following command:
 
 ```bash
-npm install what-is-the-weather -g
+npm install -g what-is-the-weather
 ```
 
 ## Usage
+After installation, you can use the app directly from the command line. Here are some examples of how to use it:
 
-To use the Weather App, follow these steps:
+### Basic Usage
+To retrieve the weather for a specific city, simply provide the city name as a command-line argument:
 
-1. Launch the app with the necessary arguments:
+```bash
+what-is-the-weather -c "New York"
+```
 
-    ```bash
-    weather --key <API_KEY> --city <CITY_NAME>
-    ```
+### Providing API Key
+You can also provide your OpenWeather API key to ensure accurate weather data retrieval:
 
-    Replace `<API_KEY>` with your OpenWeatherMap API key and `<CITY_NAME>` with the name of the city for which you want to retrieve weather information.
+```bash
+what-is-the-weather -k "your-api-key" -c "London"
+```
+
+### Help
+For more information and available options, you can use the help command:
+
+```bash
+what-is-the-weather --help
+```
+
+## Note
+Ensure you have a valid API key from OpenWeather. You can obtain one by signing up at [OpenWeather](https://home.openweathermap.org/users/sign_up).
 
