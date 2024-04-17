@@ -8,13 +8,18 @@ import { ArgumentManager } from "./services/args.service.js";
 import { LogManager } from "./services/log.service.js";
 import { StorageManager } from "./services/storage.service.js";
 import { WeatherAPI } from "./services/weather.service.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const getOpenWeatherConfig = async (filePath) => {
     const data = await fs.promises.readFile(filePath, "utf-8");
     return JSON.parse(data).openweater;
 };
 
-const OPEN_WEATHER_CONFIG = await getOpenWeatherConfig(path.resolve(__dirname__, "./app.config.json"));
+const OPEN_WEATHER_CONFIG = await getOpenWeatherConfig(path.resolve(__dirname, "./app.config.json"));
 
 const FILE_PATH = path.join(os.homedir(), "weather-data.json"); // Move upper later
 // const WEATHER_BASE_URL = config.openweater.apiUrl;
