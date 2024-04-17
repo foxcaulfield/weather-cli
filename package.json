@@ -1,6 +1,6 @@
 {
   "name": "what-is-the-weather",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "weather.js",
   "bin": {

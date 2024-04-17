@@ -14,7 +14,7 @@ const getOpenWeatherConfig = async (filePath) => {
     return JSON.parse(data).openweater;
 };
 
-const OPEN_WEATHER_CONFIG = await getOpenWeatherConfig(path.resolve("./app.config.json"));
+const OPEN_WEATHER_CONFIG = await getOpenWeatherConfig(path.resolve(__dirname__, "./app.config.json"));
 
 const FILE_PATH = path.join(os.homedir(), "weather-data.json"); // Move upper later
 // const WEATHER_BASE_URL = config.openweater.apiUrl;
